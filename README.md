@@ -1,5 +1,7 @@
 # TV Downloader
 
+[![Build Binary](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml)
+
 ## Ondersteunde websites
 
 | Website | Ondersteund |
