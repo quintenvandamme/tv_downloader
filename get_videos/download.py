@@ -5,6 +5,7 @@ import progressbar
 import os
 import os.path
 from .constants import *
+from .util import resource_path
 
 def checkIfFileExists(outputFile):
     exists = os.path.isfile(outputFile)
@@ -22,8 +23,10 @@ def download_video(url,outputFile):
         progress_bar = progressbar.ProgressBar(widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()], max_value=maxPercentage)
         progress_bar.start()
         
+        ffmpeg_path = resource_path('./ffmpeg/ffmpeg')
+
         command = [
-            "./ffmpeg/ffmpeg",
+            ffmpeg_path,
             "-i",
             url,
             "-c",
