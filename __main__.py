@@ -15,8 +15,6 @@ def handelArgs():
             videos = get_videos(url)
             for video in videos:
                 video.download()
-        else:
-            print_error(STR_10)
 
 handelArgs()
 

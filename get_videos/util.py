@@ -11,7 +11,9 @@ from .download import download_video
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
+    path = relative_path.split('/')
+    path = path[len(path)-1]
+    return path
 
 def print_error(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
