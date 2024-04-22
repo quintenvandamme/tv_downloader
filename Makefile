@@ -17,6 +17,6 @@ build: clean pip_init
 	@echo "=> Building TV Downloader for $(OS)-$(ARCH)"
 	pyinstaller --onefile --clean --name tvdownloader __main__.py	
 	mkdir out
-	mv dist/tvdownloader out/tvdownloader
+	mv dist/tvdownloader out/tvdownloader-$(OS)-$(ARCH)
 	rm -rf dist/ build/ tvdownloader.spec
 	@echo "=> Done. Binary is in out/"

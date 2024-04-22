@@ -26,6 +26,6 @@ jobs:
     - name: Upload Binary
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "out/tvdownloader"
+        artifacts: "out/*"
         allowUpdates: true
         tag: "continious-build"
