@@ -52,6 +52,10 @@ def download_video(url,outputFile,ffmpeg_path):
         
         progress_bar.finish()
                 
+        filename = outputFile.split('/')
+        filename = filename[len(filename)-1]
+        fileDir = outputFile.split(filename)[0]
+
         print('\n')
-        print(STR_9 % (outputFile,'./'))
+        print(STR_9 % (filename,fileDir))
         

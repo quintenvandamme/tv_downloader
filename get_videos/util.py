@@ -3,6 +3,7 @@ import json
 import datetime
 import os
 import sys
+from sys import exit
 from io import BytesIO
 from .constants import *
 from .download import download_video
@@ -14,6 +15,9 @@ def resource_path(relative_path):
     path = relative_path.split('/')
     path = path[len(path)-1]
     return path
+
+def saveFileToPath(fileName):
+    return os.path.join(os.getcwd(),fileName)
 
 def print_error(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -64,4 +68,4 @@ class Video:
         return "streamUrl: " + self.streamUrl + "\nurl: " + self.originalUrl + "\ntitle: " + self.title + "\nthumbnail: " + self.thumbnailUrl + "\nfilename: " + self.fileName + "\ndate: " + self.date
         
     def download(self):
-        download_video(self.streamUrl,self.fileName,ffmpeg_path=resource_path('./ffmpeg/ffmpeg'))
+        download_video(self.streamUrl,saveFileToPath(self.fileName),ffmpeg_path=resource_path('./ffmpeg/ffmpeg'))

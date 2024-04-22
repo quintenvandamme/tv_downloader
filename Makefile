@@ -23,7 +23,8 @@ download_ffmpeg:
 
 build: clean pip_init download_ffmpeg
 	@echo "=> Building TV Downloader for $(OS)-$(ARCH)"
-	pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --onefile --clean --name tvdownloader __main__.py	
+	pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --onefile --clean --name tvdownloader --icon=data/logo/logo.ico  __main__.py	
 	mv dist/tvdownloader out/tvdownloader-$(OS)-$(ARCH)
 	rm -rf dist/ build/ tvdownloader.spec ./out/ffmpeg
+	chmod +x out/tvdownloader-$(OS)-$(ARCH)
 	@echo "=> Done. Binary is in out/"

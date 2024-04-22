@@ -1,4 +1,5 @@
 import sys
+from sys import exit
 from get_videos import get_videos
 from get_videos.constants import *
 from get_videos.util import print_error
@@ -10,11 +11,15 @@ def handelArgs():
     for arg in args:
         if '-v' == arg or '--version' == arg and args_len == 1:
             print(f'Version {VERSION} - {VERSION_DATE}')
-        elif '-i' == arg and args_len == 2:
+            break
+        elif '-i' == arg and args_len >= 2:
             url = args[1]
             videos = get_videos(url)
             for video in videos:
                 video.download()
+
+        break
+    exit()
 
 handelArgs()
 
