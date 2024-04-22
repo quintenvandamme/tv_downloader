@@ -1,0 +1,85 @@
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import QIcon
+#from constants import *
+#from util import *
+import sys
+import os
+
+from get_videos import get_videos
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return relative_path
+
+class videoItem:
+    def __init__(self, video, list_widget):
+        self.video = video
+        list_widget.addItem(self.video.title)
+
+class MainApplication:
+    def __init__(self):
+        self.app = QApplication(sys.argv)
+        self.app.setWindowIcon(QIcon(resource_path('data/logo/logo.png')))
+        self.window = QWidget()
+        self.window.setWindowTitle('TV Downloader')
+        self.window.show()
+        self._create_widgets()
+
+    def _create_widgets(self):
+        main_layout = QVBoxLayout()
+        search_layout = QHBoxLayout()
+
+        # Create a search input field
+        self.search_input = QLineEdit()
+        self.search_input.returnPressed.connect(self._handle_search)
+        search_layout.addWidget(self.search_input, stretch=1000)
+
+        # Create a search button
+        self.search_button = QPushButton('Zoeken')
+        self.search_button.clicked.connect(self._handle_search)
+        search_layout.addWidget(self.search_button)
+        search_layout.addStretch(1)
+
+        # Add the search layout to the main layout
+        main_layout.addLayout(search_layout)
+
+        # Create the content area. This is a list of search results
+        self.search_results = QListWidget()
+        main_layout.addWidget(self.search_results)
+
+        self.window.setLayout(main_layout)
+
+    def _handle_search(self):
+        # This function will be called when the search button is clicked
+        search_query = self.search_input.text()
+        videos = get_videos(search_query)
+        for video in videos:
+            videoItem(video, self.search_results)
+
+
+    def run(self):
+        self.app.exec()
+
+if __name__ == '__main__':
+    app = MainApplication()
+    app.run()
+
+# test
+# https://www.hln.be/buitenland/live-gijzeling-in-nederlands-cafe-voorbij-vier-slachtoffers-vrijgelaten-gijzelnemer-geboeid-door-de-politie~a0dfda52/
+# https://www.vrt.be/vrtmax/a-z/vrt-nws-journaal/2024/vrt-nws-journaal-vrt-nws-journaal-laat-20240421/
+# https://focus-wtv.be/nieuws/miss-belgie-west-vlaamse-finalisten-vallen-niet-in-de-prijzen
+# https://www.bruzz.be/actua/politiek/vlaams-minister-van-brussel-regering-blinkt-uit-passiviteit-en-inertie-2024-02-21
+# https://www.tvoost.be/nieuws/jan-tratnik-wint-omloop-oliver-naesen-heel-knap-vierde-als-je-vooraf-de-benen-niet-kan-inschatten-is-dit-een-mooi-resultaat-165206
+# https://www.tvl.be/nieuws/jongeren-die-voor-het-eerst-stemmen-weten-weinig-of-niets-over-de-verkiezingen-165198
+# https://www.robtv.be/nieuws/weekwas-zaterdag-24-februari-165193
+# https://www.hln.be/video/productie/we-hebben-de-ram-bij-de-horens-gevat-letterlijk-428950
+# https://www.nieuwsblad.be/cnt/dmf20240225_94177728
+# https://www.vrt.be/vrtmax/a-z/vrt-nws-journaal/2024/vrt-nws-journaal-vrt-nws-journaal-13u-20240225
+# https://www.rtv.be/regionale-sport/wout-van-aert-wil-meteen-scoren-tijdens-openingsweekend
+# https://www.vrt.be/vrtnws/nl/kijk/2024/02/25/d7d-oekraine-oorlog-iryna-mudra-gevlucht-met-zoon-nooit-opgeven-/
+# https://www.vrt.be/vrtnws/nl/2024/02/26/liveblog-boerenprotest/
+# https://www.gva.be/cnt/dmf20240229_96365490
+# https://www.ringtv.be/felicitaties-voor-drie-jarigen-die-op-schrikkeldag-jarig-zijn
+# https://www.standaard.be/cnt/dmf20231113_92216398
+# https://www.vrt.be/vrtnws/nl/2024/02/29/poetin-toespraak-parlement/
