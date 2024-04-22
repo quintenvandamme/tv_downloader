@@ -22,3 +22,10 @@ jobs:
 
     - name: Build TV Downloader
       run: make build
+
+    - name: Upload Binary
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "out/tvdownloader"
+        allowUpdates: true
+        tag: "continious-build"
