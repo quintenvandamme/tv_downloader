@@ -19,7 +19,7 @@ def download_video(url,outputFile):
         maxPercentage = 100
         
         command = [
-            "ffmpeg",
+            "./ffmpeg/ffmpeg",
             "-i",
             url,
             "-c",
