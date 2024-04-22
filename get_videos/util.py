@@ -62,4 +62,4 @@ class Video:
         return "streamUrl: " + self.streamUrl + "\nurl: " + self.originalUrl + "\ntitle: " + self.title + "\nthumbnail: " + self.thumbnailUrl + "\nfilename: " + self.fileName + "\ndate: " + self.date
         
     def download(self):
-        download_video(self.streamUrl,self.fileName)
+        download_video(self.streamUrl,self.fileName,ffmpeg_path=resource_path('./ffmpeg/ffmpeg'))
