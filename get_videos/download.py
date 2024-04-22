@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import threading
+import progressbar
 import os
 import os.path
 from .constants import *
@@ -17,6 +18,9 @@ def download_video(url,outputFile):
         duration = 0
         out_time = 0
         maxPercentage = 100
+
+        progress_bar = progressbar.ProgressBar(widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()], max_value=maxPercentage)
+        progress_bar.start()
         
         command = [
             "./ffmpeg/ffmpeg",
@@ -42,9 +46,11 @@ def download_video(url,outputFile):
                 a = str(line).split('out_time=')[1].split('.')[0].replace(':','')
                 out_time = int(a)
                 percentage = int((out_time/duration) * 100)
+                progress_bar.update(percentage)
             if b'progress=end' in line:
                 break;
-                
+        
+        progress_bar.finish()
                 
         print('\n')
         print(STR_9 % (outputFile,'./'))

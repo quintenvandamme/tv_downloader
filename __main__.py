@@ -14,7 +14,7 @@ def handelArgs():
             url = args[1]
             videos = get_videos(url)
             for video in videos:
-                print(video)
+                video.download()
         else:
             print_error(STR_10)
 
