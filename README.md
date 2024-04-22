@@ -1,6 +1,8 @@
 # TV Downloader
 
-| Website | Werkend |
+## Ondersteunde websites
+
+| Website | Ondersteund |
 | ------- | --------- |
 |[bruzz.be](https://bruzz.be)|✅|
 |[focus-wtv.be](https://focus-wtv.be)|✅|
@@ -19,3 +21,8 @@
 > [!NOTE]  
 > vrtnws en vrtmax werken momenteel niet omdat je een account nodig hebt om de video's te bekijken.
 
+## Installatie
+
+```bash
+make build
+```

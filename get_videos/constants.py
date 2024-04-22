@@ -1,5 +1,5 @@
 VERSION = '0.1.0'
-VERSION_DATE = '30/03/2024'
+VERSION_DATE = '22/04/2024'
 
 # strings
 STR_1 = 'Geef een URL in'
