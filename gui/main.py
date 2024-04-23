@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import *
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QPixmap
 #from constants import *
 #from util import *
 import sys
 import os
+import requests
 
 from get_videos import get_videos
 
@@ -12,10 +13,75 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return relative_path
 
+def create_icon_from_url(url):
+    image_data = requests.get(url).content
+
+    pixmap = QPixmap()
+    pixmap.loadFromData(image_data)
+
+    icon = QIcon(pixmap)
+    return icon
+
+
 class videoItem:
     def __init__(self, video, list_widget):
-        self.video = video
-        list_widget.addItem(self.video.title)
+        # Create a QWidget to hold your item content
+        item_widget = QWidget()
+
+        # Create a layout for the item widget
+        item_layout = QHBoxLayout()
+        item_widget.setLayout(item_layout)
+
+        # Create a image for the thumbnail form a url
+        thumbnail_icon = create_icon_from_url(video.thumbnailUrl)
+        thumbnail_label = QLabel()
+        thumbnail_label.setPixmap(thumbnail_icon.pixmap(250, 250))
+        item_layout.addWidget(thumbnail_label)
+       
+        # Create layout for the metadata
+        metadata_layout = QVBoxLayout()
+
+        # Create a label for the title
+        title_label = QLabel(video.title)
+        title_label.setWordWrap(True)
+        font = title_label.font()
+        font.setBold(True)
+        title_label.setFont(font)
+        metadata_layout.addWidget(title_label)
+
+        # Create a label for the description
+        description_text = video.description
+        if len(description_text) > 200:
+            description_text = description_text[:200] + '...'
+
+        description_label = QLabel(description_text)
+        description_label.setWordWrap(True)
+        # set maximum length of description
+        description_label.setMaximumWidth(300)
+        metadata_layout.addWidget(description_label)
+
+        # Create layout for date and download button
+        date_layout = QHBoxLayout()
+
+        # Create a label for the date
+        date_label = QLabel(video.date)
+        date_layout.addWidget(date_label, stretch=1000)
+
+        # Create button to download the video
+        download_button = QPushButton('Download')
+        date_layout.addWidget(download_button)
+
+        # Add the metadata layout to the item layout
+        
+        metadata_layout.addLayout(date_layout)
+        item_layout.addLayout(metadata_layout, stretch=1000)
+
+        # Create a QListWidgetItem and set the item widget as its widget
+        list_item = QListWidgetItem()
+        list_item.setSizeHint(item_widget.sizeHint())  # Set size hint to ensure proper sizing
+        list_widget.addItem(list_item)
+        list_widget.setItemWidget(list_item, item_widget)
+
 
 class MainApplication:
     def __init__(self):
