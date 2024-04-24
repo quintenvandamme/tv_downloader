@@ -11,16 +11,12 @@ def checkIfFileExists(outputFile):
     return exists
     
 
-def download_video(url,outputFile,ffmpeg_path):
+def download_video(url,outputFile,ffmpeg_path,progressBar):
     if checkIfFileExists(outputFile):
         print(STR_8 % (outputFile,))
     else:
         duration = 0
         out_time = 0
-        maxPercentage = 100
-
-        progress_bar = progressbar.ProgressBar(widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()], max_value=maxPercentage)
-        progress_bar.start()
         
         command = [
             ffmpeg_path,
@@ -46,11 +42,11 @@ def download_video(url,outputFile,ffmpeg_path):
                 a = str(line).split('out_time=')[1].split('.')[0].replace(':','')
                 out_time = int(a)
                 percentage = int((out_time/duration) * 100)
-                progress_bar.update(percentage)
+                progressBar.update(percentage)
             if b'progress=end' in line:
                 break;
         
-        progress_bar.finish()
+        progressBar.finish()
                 
         filename = outputFile.split('/')
         filename = filename[len(filename)-1]

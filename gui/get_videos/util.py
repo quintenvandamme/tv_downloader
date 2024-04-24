@@ -3,11 +3,12 @@ import json
 import datetime
 import os
 import sys
+import threading
 from sys import exit
 from io import BytesIO
 from .constants import *
 from .download import download_video
-
+from PyQt6.QtWidgets import QProgressBar
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -54,6 +55,22 @@ def getImageData(url):
     except:
         print_error(STR_5)
 
+class ProgressBar:
+    def __init__(self, parent):
+        self.progress = 0
+        self.progress_bar = QProgressBar()
+        parent.layout().addWidget(self.progress_bar)
+        self.update(self.progress)
+        
+    def update(self, progress):
+        self.progress = progress
+        self.progress_bar.show()
+        self.progress_bar.setValue(self.progress)
+
+    def finish(self):
+        self.progress = 100
+        self.progress_bar.hide()
+
 class Video:
     def __init__(self, streamUrl, originalUrl, title, description, thumbnailUrl, fileName, date):
         self.streamUrl = streamUrl
@@ -67,5 +84,9 @@ class Video:
     def __str__(self):
         return "streamUrl: " + self.streamUrl + "\nurl: " + self.originalUrl + "\ntitle: " + self.title + "\nthumbnail: " + self.thumbnailUrl + "\nfilename: " + self.fileName + "\ndate: " + self.date
         
-    def download(self):
-        download_video(self.streamUrl,saveFileToPath(self.fileName),ffmpeg_path=resource_path('./ffmpeg/ffmpeg'))
+    def download(self, guiParent):
+        progressBar = ProgressBar(guiParent)
+        thread = threading.Thread(target=download_video, args=(self.streamUrl,saveFileToPath(self.fileName), resource_path('./ffmpeg/ffmpeg'),progressBar,))
+        thread.start()
+        if not thread.is_alive():
+            guiParent.layout().removeWidget(progressBar.progress_bar)

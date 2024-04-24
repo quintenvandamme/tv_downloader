@@ -22,7 +22,6 @@ def create_icon_from_url(url):
     icon = QIcon(pixmap)
     return icon
 
-
 class videoItem:
     def __init__(self, video, list_widget):
         # Create a QWidget to hold your item content
@@ -69,6 +68,8 @@ class videoItem:
 
         # Create button to download the video
         download_button = QPushButton('Download')
+        download_button.clicked.connect(lambda: video.download(date_layout))
+        
         date_layout.addWidget(download_button)
 
         # Add the metadata layout to the item layout
@@ -81,7 +82,6 @@ class videoItem:
         list_item.setSizeHint(item_widget.sizeHint())  # Set size hint to ensure proper sizing
         list_widget.addItem(list_item)
         list_widget.setItemWidget(list_item, item_widget)
-
 
 class MainApplication:
     def __init__(self):
@@ -117,12 +117,11 @@ class MainApplication:
         self.window.setLayout(main_layout)
 
     def _handle_search(self):
-        # This function will be called when the search button is clicked
+        # This function will be called when the search button is clicked        
         search_query = self.search_input.text()
         videos = get_videos(search_query)
         for video in videos:
             videoItem(video, self.search_results)
-
 
     def run(self):
         self.app.exec()
