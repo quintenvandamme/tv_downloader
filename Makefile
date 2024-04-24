@@ -3,7 +3,7 @@
 ARCH := $(shell uname -m)
 OS := $(shell uname -s)
 
-all: build
+all: appimage
 
 pip_requirements:
 	@echo "=> Installing pip requirements"

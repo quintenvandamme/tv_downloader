@@ -21,8 +21,11 @@ jobs:
       with:
         python-version: '3.10'
 
+    - name: Install desktop-file-utils
+      run: sudo apt-get install -y desktop-file-utils
+
     - name: Build TV Downloader
-      run: make appimage
+      run: make all
 
     - name: Upload Binary
       uses: ncipollo/release-action@v1
