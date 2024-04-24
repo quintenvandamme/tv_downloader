@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Tv Downloader
+Exec=tvdownloader
+Icon=logo-256x256
+Terminal=false
+Categories=Utility;

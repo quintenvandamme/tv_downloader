@@ -86,7 +86,7 @@ class videoItem:
 class MainApplication:
     def __init__(self):
         self.app = QApplication(sys.argv)
-        self.app.setWindowIcon(QIcon(resource_path('data/logo/logo.png')))
+        self.app.setWindowIcon(QIcon(resource_path('data/logo/logo-64x64.png')))
         self.window = QWidget()
         self.window.setWindowTitle('TV Downloader')
         self.window.show()

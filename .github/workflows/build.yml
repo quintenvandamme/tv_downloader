@@ -21,8 +21,11 @@ jobs:
       with:
         python-version: '3.10'
 
+    - name: Install Appimagetool
+      run: apt install appimagetool -y
+
     - name: Build TV Downloader
-      run: make build
+      run: make appimage
 
     - name: Upload Binary
       uses: ncipollo/release-action@v1

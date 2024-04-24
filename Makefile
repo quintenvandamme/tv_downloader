@@ -23,8 +23,20 @@ download_ffmpeg:
 
 build: clean pip_requirements download_ffmpeg
 	@echo "=> Building TV Downloader for $(OS)-$(ARCH)"
-	pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --add-data "./data/logo/logo.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo.ico  gui/main.py
+	pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo.ico  gui/main.py
 	mv dist/tvdownloader out/tvdownloader-$(OS)-$(ARCH)
 	rm -rf dist/ build/ tvdownloader.spec ./out/ffmpeg
 	chmod +x out/tvdownloader-$(OS)-$(ARCH)
 	@echo "=> Done. Binary is in out/"
+
+appimage: build
+	@echo "=> Building AppImage"
+	mkdir -p out/appimage.AppDir
+	mkdir -p out/appimage.AppDir/usr/bin
+	cp  out/tvdownloader-$(OS)-$(ARCH) out/appimage.AppDir/usr/bin/tvdownloader
+	cp data/appimage/* out/appimage.AppDir/
+	cp data/logo/logo-256x256.png out/appimage.AppDir/
+	chmod +x out/appimage.AppDir/AppRun
+	chmod +x out/appimage.AppDir/tvdownloader.desktop
+	ARCH=$(ARCH) appimagetool out/appimage.AppDir out/tvdownloader-$(OS)-$(ARCH).AppImage 
+	rm -rf out/appimage.AppDir
