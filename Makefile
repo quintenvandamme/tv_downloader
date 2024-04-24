@@ -30,6 +30,9 @@ build: clean pip_requirements download_ffmpeg
 	@echo "=> Done. Binary is in out/"
 
 appimage: build
+	@echo "=> Downloading AppImage Tool"
+	curl -L https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$(ARCH).AppImage -o appimagetool.AppImage
+	chmod +x appimagetool.AppImage
 	@echo "=> Building AppImage"
 	mkdir -p out/appimage.AppDir
 	mkdir -p out/appimage.AppDir/usr/bin
@@ -38,5 +41,6 @@ appimage: build
 	cp data/logo/logo-256x256.png out/appimage.AppDir/
 	chmod +x out/appimage.AppDir/AppRun
 	chmod +x out/appimage.AppDir/tvdownloader.desktop
-	ARCH=$(ARCH) appimagetool out/appimage.AppDir out/tvdownloader-$(OS)-$(ARCH).AppImage 
-	rm -rf out/appimage.AppDir
+	ARCH=$(ARCH) ./appimagetool.AppImage out/appimage.AppDir out/tvdownloader-$(OS)-$(ARCH).AppImage 
+	rm -rf out/appimage.AppDir appimagetool.AppImage
+	@echo "=> Done. AppImage is in out/"
