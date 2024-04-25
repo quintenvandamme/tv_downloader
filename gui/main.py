@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import *
-from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtGui import *
 #from constants import *
 #from util import *
 import sys
@@ -67,12 +67,16 @@ class videoItem:
         date_layout.addWidget(date_label, stretch=1000)
 
         # Create button to download the video
-        download_button = QPushButton('Download')
-        download_button.clicked.connect(lambda: video.download(date_layout))
-        
-        date_layout.addWidget(download_button)
+        if video.exists():
+            download_button = QPushButton('Downloaded')
+            download_button.setEnabled(False)
+            date_layout.addWidget(download_button)
+        else:
+            download_button = QPushButton('Download')
+            download_button.clicked.connect(lambda: video.download(date_layout))
+            date_layout.addWidget(download_button)
 
-        # Add the metadata layout to the item layout
+        # Add the metadata layout to the item layouts
         
         metadata_layout.addLayout(date_layout)
         item_layout.addLayout(metadata_layout, stretch=1000)
@@ -86,15 +90,40 @@ class videoItem:
 class MainApplication:
     def __init__(self):
         self.app = QApplication(sys.argv)
-        self.app.setWindowIcon(QIcon(resource_path('data/logo/logo-64x64.png')))
+        self.app.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
+        
+        if self.app.desktopFileName() == '':
+            self.app.setDesktopFileName('tvdownloader.desktop')
+
         self.window = QWidget()
         self.window.setWindowTitle('TV Downloader')
+        self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
         self.window.show()
         self._create_widgets()
 
     def _create_widgets(self):
         main_layout = QVBoxLayout()
         search_layout = QHBoxLayout()
+        toolbar_layout = QHBoxLayout()
+
+        # Create a new layout for the toolbar
+        toolbar_layout.setContentsMargins(0, 0, 0, 0)
+        toolbar = QToolBar()
+        toolbar.setMovable(False)
+        
+        # Create a settings button
+
+        settings_action = QAction('Instellingen', self.window)
+        settings_action.triggered.connect(lambda: SettingsApplication(self.window))
+        toolbar.addAction(settings_action)
+
+        # Create an about button
+        about_action = QAction('Over', self.window)
+        about_action.triggered.connect(lambda: AboutApplication(self.window))
+        toolbar.addAction(about_action)
+
+        toolbar_layout.addWidget(toolbar)
+        main_layout.addLayout(toolbar_layout)
 
         # Create a search input field
         self.search_input = QLineEdit()
@@ -125,6 +154,52 @@ class MainApplication:
 
     def run(self):
         self.app.exec()
+
+class SettingsApplication:
+    def __init__(self, parent):
+        # Create a new dialog window
+        self.window = QDialog(parent)
+        self.window.setWindowTitle('Instellingen')
+        self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
+        self.window.setMinimumSize(400, 300)
+        self.window.show()
+
+    def _create_widgets(self):
+        pass
+
+class AboutApplication:
+    def __init__(self, parent):
+        # Create a new dialog window
+        self.window = QDialog(parent)
+        self.window.setWindowTitle('Over')
+        self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
+        self.window.setMinimumSize(100, 150)
+
+        # Create a layout for the window
+        layout = QVBoxLayout()
+        
+        # Create a label with the about text
+        about_text = QLabel('TV Downloader is een applicatie die het mogelijk maakt om video\'s van verschillende nieuwswebsites te downloaden.')
+        about_text.setWordWrap(True)
+        layout.addWidget(about_text)
+
+        # Create a layout for the version information and the close button
+        version_layout = QHBoxLayout()
+
+        # Create a version label
+        version_text = QLabel('Versie 0.1.0 (alpha)')
+        version_layout.addWidget(version_text, stretch=1000)
+
+        # Add a close button
+        close_button = QPushButton('Ok')
+        close_button.clicked.connect(self.window.close)
+        version_layout.addWidget(close_button)
+
+        layout.addLayout(version_layout)
+        self.window.setLayout(layout)
+
+        self.window.show()
+
 
 if __name__ == '__main__':
     app = MainApplication()

@@ -1,7 +1,4 @@
 import subprocess
-import sys
-import threading
-import progressbar
 import os
 import os.path
 from .constants import *
@@ -10,7 +7,6 @@ def checkIfFileExists(outputFile):
     exists = os.path.isfile(outputFile)
     return exists
     
-
 def download_video(url,outputFile,ffmpeg_path,progressBar):
     if checkIfFileExists(outputFile):
         print(STR_8 % (outputFile,))

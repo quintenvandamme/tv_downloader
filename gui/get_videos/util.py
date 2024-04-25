@@ -84,9 +84,13 @@ class Video:
     def __str__(self):
         return "streamUrl: " + self.streamUrl + "\nurl: " + self.originalUrl + "\ntitle: " + self.title + "\nthumbnail: " + self.thumbnailUrl + "\nfilename: " + self.fileName + "\ndate: " + self.date
         
+    def exists(self):
+        return os.path.isfile(saveFileToPath(self.fileName))
+
     def download(self, guiParent):
         progressBar = ProgressBar(guiParent)
         thread = threading.Thread(target=download_video, args=(self.streamUrl,saveFileToPath(self.fileName), resource_path('./ffmpeg/ffmpeg'),progressBar,))
         thread.start()
+
         if not thread.is_alive():
             guiParent.layout().removeWidget(progressBar.progress_bar)

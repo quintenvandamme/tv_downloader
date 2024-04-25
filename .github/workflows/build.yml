@@ -1,4 +1,4 @@
-name: Build Binary
+name: Build
 
 on:
   push:
@@ -14,8 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    - uses: actions/checkout@v3
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
@@ -25,7 +23,7 @@ jobs:
       run: sudo apt-get install -y desktop-file-utils
 
     - name: Build TV Downloader
-      run: make all
+      run: python build.py build
 
     - name: Upload Binary
       uses: ncipollo/release-action@v1

@@ -17,7 +17,7 @@
 |[standaard.be](https://standaard.be)|✅|
 |[tvoost.be](https://tvoost.be)|✅|
 |[tvl.be](https://tvl.be)|✅|
-|[vrtnws.be](https://vrtnws.be)|❌|
+|[vrtnws.be](https://vrtnws.be)|✅|
 |[vrtmax.be](https://vrtmax.be)|❌|
 
 > [!NOTE]  
@@ -25,6 +25,13 @@
 
 ## Installatie
 
-```bash
-make build
+| OS | ARCH | Download |
+| -- | ---- | -------- |
+| Linux | x86_64 | [tv_downloader-linux-x86_64](https://github.com/quintenvandamme/tv_downloader/releases/download/continious-build/tvdownloader-Linux-x86_64) |
+| Linux | x86_64 | [tv_downloader-linux-x86_64.AppImage](https://github.com/quintenvandamme/tv_downloader/releases/download/continious-build/tvdownloader-Linux-x86_64.AppImage) |
+
+## Bouwen
+
+```sh
+python build.py build
 ```

@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=Tv Downloader
-Exec=tvdownloader
+Exec=tvdownloader -qwindowicon logo-256x256.png
 Icon=logo-256x256
 Terminal=false
 Categories=Utility;
