@@ -49,7 +49,6 @@ jobs:
 
           run: |
             sudo apt-get install -y desktop-file-utils
-            python build.py build
 
       - name: Upload Binary
         uses: ncipollo/release-action@v1
