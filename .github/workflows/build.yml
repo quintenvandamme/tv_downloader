@@ -49,6 +49,7 @@ jobs:
             sudo apt-get update -q -y
             sudo apt-get install -q -y desktop-file-utils python3 python-is-python3
         
+        - name: Build TV Downloader
           run: |
             python build.py build
 
