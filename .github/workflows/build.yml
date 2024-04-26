@@ -36,7 +36,7 @@ jobs:
 
     container:
       image: arm64v8/ubuntu:latest
-      options: --user root
+      options: --user root --platform linux/arm64
 
     steps:
     - uses: actions/checkout@v4
