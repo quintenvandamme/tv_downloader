@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  x86_64:
+  Linux_x86_64:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,30 +30,28 @@ jobs:
         artifacts: "./out/*"
         allowUpdates: true
         tag: "continious-build"
-
-  arm64v8:
+      
+  Linux_aarch64:
     runs-on: ubuntu-latest
 
-    container:
-      image: arm64v8/ubuntu:latest
-      options: --user root --platform linux/arm64
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
+      - uses: actions/checkout@v4
+      - uses: uraimo/run-on-arch-action@v2
+        name: Run commands
+        id: runcmd
+        with:
+          arch: aarch64
+          distro: ubuntu_latest
 
-    - name: Install desktop-file-utils
-      run: sudo apt-get install -y desktop-file-utils
+          githubToken: ${{ github.token }}
 
-    - name: Build TV Downloader
-      run: python build.py build
+          commands: |
+            sudo apt-get install -y desktop-file-utils
+            python build.py build
 
-    - name: Upload Binary
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "./out/*"
-        allowUpdates: true
-        tag: "continious-build"
+      - name: Upload Binary
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./out/*"
+          allowUpdates: true
+          tag: "continious-build"
