@@ -47,10 +47,10 @@ jobs:
 
           setup: |
             sudo apt-get update -q -y
-            sudo apt-get install -q -y desktop-file-utils
+            sudo apt-get install -q -y desktop-file-utils python3
         
           run: |
-            python3 build.py build
+            python build.py build
 
       - name: Upload Binary
         uses: ncipollo/release-action@v1
