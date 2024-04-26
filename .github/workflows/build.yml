@@ -45,10 +45,13 @@ jobs:
 
           githubToken: ${{ github.token }}
 
+          setup: |
+            apt-get update -q -y
+            apt-get install -q -y desktop-file-utils
+        
           shell: /bin/sh
 
           run: |
-            apt-get install -y desktop-file-utils
             python build.py build
 
       - name: Upload Binary
