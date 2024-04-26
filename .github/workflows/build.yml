@@ -47,7 +47,7 @@ jobs:
 
           setup: |
             sudo apt-get update -q -y
-            sudo apt-get install -q -y desktop-file-utils python3
+            sudo apt-get install -q -y desktop-file-utils python3 python-is-python3
         
           run: |
             python build.py build
