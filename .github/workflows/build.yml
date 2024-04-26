@@ -54,7 +54,7 @@ jobs:
         
       - name: Build TV Downloader
         run: |
-          ${which python} build.py build
+          $(which python) build.py build
 
       - name: Upload Binary
         uses: ncipollo/release-action@v1
