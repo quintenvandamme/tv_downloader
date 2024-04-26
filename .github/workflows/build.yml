@@ -49,8 +49,6 @@ jobs:
             sudo apt-get update -q -y
             sudo apt-get install -q -y desktop-file-utils
         
-          shell: /bin/sh
-
           run: |
             python build.py build
 
