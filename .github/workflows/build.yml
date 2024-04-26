@@ -50,7 +50,7 @@ jobs:
             sudo apt-get install -q -y desktop-file-utils
         
           run: |
-            python build.py build
+            python3 build.py build
 
       - name: Upload Binary
         uses: ncipollo/release-action@v1
