@@ -46,8 +46,8 @@ jobs:
           githubToken: ${{ github.token }}
 
           setup: |
-            apt-get update -q -y
-            apt-get install -q -y desktop-file-utils
+            sudo apt-get update -q -y
+            sudo apt-get install -q -y desktop-file-utils
         
           shell: /bin/sh
 
