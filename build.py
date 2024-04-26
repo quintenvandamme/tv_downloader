@@ -34,7 +34,7 @@ def _get_ffmpeg():
     
 def install_dependencies():
     print("=> Installing dependencies...")
-    _run_command("pip install -r requirements.txt")
+    _run_command("pip install -r requirements.txt --break-system-packages")
 
 def clean():
     print("=> Cleaning up...")

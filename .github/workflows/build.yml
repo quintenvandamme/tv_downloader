@@ -30,35 +30,3 @@ jobs:
         artifacts: "./out/*"
         allowUpdates: true
         tag: "continious-build"
-      
-  Linux_aarch64:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
-        name: Run commands
-        id: runcmd
-        with:
-          arch: aarch64
-          distro: ubuntu_latest
-
-          githubToken: ${{ github.token }}
-
-          setup: |
-            sudo apt-get update -q -y
-            sudo apt-get install -q -y desktop-file-utils python3 python-is-python3
-
-          run: |
-            echo "Running on aarch64"
-        
-      - name: Build TV Downloader
-        run: |
-          $(which python3) build.py build
-
-      - name: Upload Binary
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "./out/*"
-          allowUpdates: true
-          tag: "continious-build"
