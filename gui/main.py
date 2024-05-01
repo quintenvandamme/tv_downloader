@@ -7,6 +7,9 @@ import os
 import requests
 
 from get_videos import get_videos
+from settings import Settings
+
+settings = Settings()
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -73,7 +76,7 @@ class videoItem:
             date_layout.addWidget(download_button)
         else:
             download_button = QPushButton('Download')
-            download_button.clicked.connect(lambda: video.download(date_layout))
+            download_button.clicked.connect(lambda: video.download(date_layout, settings.get('Settings', 'download_path')))
             date_layout.addWidget(download_button)
 
         # Add the metadata layout to the item layouts
@@ -92,8 +95,8 @@ class MainApplication:
         self.app = QApplication(sys.argv)
         self.app.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
         
-        if self.app.desktopFileName() == '':
-            self.app.setDesktopFileName('tvdownloader.desktop')
+        self.app.setApplicationName('tvdownloader')
+        self.app.setDesktopFileName('tvdownloader.desktop')
 
         self.window = QWidget()
         self.window.setWindowTitle('TV Downloader')
@@ -162,10 +165,36 @@ class SettingsApplication:
         self.window.setWindowTitle('Instellingen')
         self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
         self.window.setMinimumSize(400, 300)
+        self._create_widgets()
         self.window.show()
 
+
     def _create_widgets(self):
-        pass
+        layout = QVBoxLayout()
+        download_layout = QHBoxLayout()
+
+        # Create a label for the download path
+        download_path_label = QLabel('Download locatie:')
+        download_layout.addWidget(download_path_label)
+
+        # Create a line edit for the download path
+        self.download_path_input = QLineEdit()
+        self.download_path_input.setText(settings.get('Settings', 'download_path'))
+        download_layout.addWidget(self.download_path_input)
+
+        layout.addLayout(download_layout)
+
+        # Create a button to save the settings
+        save_button = QPushButton('Opslaan')
+        save_button.clicked.connect(self._save_settings)
+        layout.addWidget(save_button)
+
+        self.window.setLayout(layout)
+
+    def _save_settings(self):
+        download_path = self.download_path_input.text()
+        settings.set('Settings', 'download_path', download_path)
+        self.window.close()
 
 class AboutApplication:
     def __init__(self, parent):

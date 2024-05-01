@@ -17,8 +17,8 @@ def resource_path(relative_path):
     path = path[len(path)-1]
     return path
 
-def saveFileToPath(fileName):
-    return os.path.join(os.getcwd(),fileName)
+def saveFileToPath(fileName,dowloadPath=""):
+    return os.path.join(dowloadPath,fileName)
 
 def print_error(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -87,9 +87,9 @@ class Video:
     def exists(self):
         return os.path.isfile(saveFileToPath(self.fileName))
 
-    def download(self, guiParent):
+    def download(self, guiParent, downloadPath):
         progressBar = ProgressBar(guiParent)
-        thread = threading.Thread(target=download_video, args=(self.streamUrl,saveFileToPath(self.fileName), resource_path('./ffmpeg/ffmpeg'),progressBar,))
+        thread = threading.Thread(target=download_video, args=(self.streamUrl,saveFileToPath(self.fileName, dowloadPath=downloadPath), resource_path('./ffmpeg/ffmpeg'),progressBar,))
         thread.start()
 
         if not thread.is_alive():
