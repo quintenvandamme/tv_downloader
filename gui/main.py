@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
-#from constants import *
-#from util import *
 import sys
 import os
 import requests
+import threading
 
 from get_videos import get_videos
 from settings import Settings
@@ -71,7 +70,7 @@ class videoItem:
 
         # Create button to download the video
         if video.exists():
-            download_button = QPushButton('Downloaded')
+            download_button = QPushButton('gedownload')
             download_button.setEnabled(False)
             date_layout.addWidget(download_button)
         else:
@@ -147,6 +146,7 @@ class MainApplication:
         main_layout.addWidget(self.search_results)
 
         self.window.setLayout(main_layout)
+        self.event = threading.Event()
 
     def _handle_search(self):
         # This function will be called when the search button is clicked        
@@ -159,42 +159,47 @@ class MainApplication:
         self.app.exec()
 
 class SettingsApplication:
-    def __init__(self, parent):
+    def __init__(self, window):
         # Create a new dialog window
-        self.window = QDialog(parent)
+        self.window = QDialog(window)
         self.window.setWindowTitle('Instellingen')
         self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
-        self.window.setMinimumSize(400, 300)
-        self._create_widgets()
+        self.window.setMinimumSize(600, 300)
         self.window.show()
-
+        self._create_widgets()
 
     def _create_widgets(self):
         layout = QVBoxLayout()
         download_layout = QHBoxLayout()
+        save_layout = QHBoxLayout()
 
         # Create a label for the download path
         download_path_label = QLabel('Download locatie:')
-        download_layout.addWidget(download_path_label)
+        download_layout.addWidget(download_path_label, stretch=1000)
 
         # Create a line edit for the download path
-        self.download_path_input = QLineEdit()
+        self.download_path_input = QLabel()
         self.download_path_input.setText(settings.get('Settings', 'download_path'))
         download_layout.addWidget(self.download_path_input)
 
-        layout.addLayout(download_layout)
+        # create a button and use a slot to connect it to the function
+        save_button = QPushButton('Open')
+        # add the standard folder icon to the button
+        save_button.setIcon(QIcon.fromTheme('folder'))
 
-        # Create a button to save the settings
-        save_button = QPushButton('Opslaan')
-        save_button.clicked.connect(self._save_settings)
-        layout.addWidget(save_button)
+        save_button.clicked.connect(lambda: self._save_settings())
+        download_layout.addWidget(save_button)
+
+        layout.addLayout(download_layout)
+        layout.addLayout(save_layout)
 
         self.window.setLayout(layout)
 
     def _save_settings(self):
-        download_path = self.download_path_input.text()
-        settings.set('Settings', 'download_path', download_path)
-        self.window.close()
+        download_path = QFileDialog.getExistingDirectory(self.window, 'Selecteer een download locatie')
+        if download_path:
+            self.download_path_input.setText(download_path)
+            settings.set('Settings', 'download_path', download_path)
 
 class AboutApplication:
     def __init__(self, parent):
@@ -228,7 +233,6 @@ class AboutApplication:
         self.window.setLayout(layout)
 
         self.window.show()
-
 
 if __name__ == '__main__':
     app = MainApplication()

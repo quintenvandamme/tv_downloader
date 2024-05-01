@@ -11,6 +11,10 @@ def _createDir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+def _get_7z():
+    _run_command("winget install -e --id 7zip.7zip --accept-source-agreements --accept-package-agreements")
+    print("=> Installed 7z")
+
 def _get_ffmpeg():
     FFMPEG_ARCH = ""
 
@@ -28,9 +32,13 @@ def _get_ffmpeg():
         _run_command("tar -xf ffmpeg.tar.xz")
         _run_command(f"mv ./ffmpeg-git-*-{FFMPEG_ARCH}-static/ffmpeg ./out/ffmpeg")
         _run_command(f"rm -rf ffmpeg.tar.xz ffmpeg-git-*-{FFMPEG_ARCH}-static")
-
     elif OS == "win32":
-        pass
+        _get_7z()
+        _run_command(f'Invoke-WebRequest -OutFile ffmpeg.7z -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z')
+        _run_command(f'7z.exe x ffmpeg.7z -oout/ffmpeg.exe bin/ffmpeg.exe -r')
+        _run_command(f'del ffmpeg.7z')
+
+    print("=> Downloaded ffmpeg")
     
 def install_dependencies():
     print("=> Installing dependencies...")
