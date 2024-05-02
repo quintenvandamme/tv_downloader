@@ -20,16 +20,16 @@ def validate_url(url):
             
     return goodUrl
 
-def get_videos(url, settings):
+def get_videos(url, settings, guiParent):
     videos = []
     checkedVideos = []
     if validate_url(url):
         if url.startswith("https://www.vrt.be/vrtmax/"):
-            videos = get_video_from_vrtmax(url, settings)
+            videos = get_video_from_vrtmax(url, settings,guiParent)
         elif url.startswith("https://www.vrt.be/vrtnws/") and '/kijk/' in url:
-            videos = get_video_from_vrtnws_single(url)
+            videos = get_video_from_vrtnws_single(url,guiParent)
         elif url.startswith("https://www.vrt.be/vrtnws/") and not '/kijk/' in url:
-            videos = get_video_from_vrtnws_multi(url)
+            videos = get_video_from_vrtnws_multi(url,guiParent)
         elif url.startswith("https://www.hln.be/"):
             videos = get_video_from_hln(url)
         elif url.startswith("https://www.bruzz.be/"):
@@ -47,7 +47,7 @@ def get_videos(url, settings):
         elif url.startswith("https://www.standaard.be/"):
             videos = get_video_from_standaard(url)
         else:
-            print_error(STR_4)
+            print_error(STR_4,guiParent)
             
     for video in videos:
         if video != None:

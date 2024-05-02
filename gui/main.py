@@ -147,7 +147,7 @@ class MainApplication:
     def _handle_search(self):
         # This function will be called when the search button is clicked        
         search_query = self.search_input.text()
-        videos = get_videos(search_query, settings)
+        videos = get_videos(search_query, settings,self.window)
         for video in videos:
             videoItem(video, self.search_results)
 
@@ -179,23 +179,49 @@ class SettingsApplication:
         download_layout.addWidget(self.download_path_input)
 
         # create a button and use a slot to connect it to the function
-        save_button = QPushButton('Open')
+        download_button = QPushButton('Open')
         # add the standard folder icon to the button
-        save_button.setIcon(QIcon.fromTheme('folder'))
+        download_button.setIcon(QIcon.fromTheme('folder'))
 
-        save_button.clicked.connect(lambda: self._save_settings())
-        download_layout.addWidget(save_button)
+        download_button.clicked.connect(lambda: self._download_button_action())
+        download_layout.addWidget(download_button)
+
+        # create vrt account settings
+        vrt_account_layout = QHBoxLayout()
+        vrt_account_label = QLabel('VRT account:')
+        vrt_account_layout.addWidget(vrt_account_label)
+        self.vrt_account_email_input = QLineEdit(settings.get('Vrt', 'email'))
+        self.vrt_account_email_input.setPlaceholderText('E-mail')
+        self.vrt_account_email_input.width = 400
+        vrt_account_layout.addWidget(self.vrt_account_email_input)
+        self.vrt_account_input = QLineEdit(settings.get('Vrt', 'password'))
+        self.vrt_account_input.setPlaceholderText('Wachtwoord')
+        self.vrt_account_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.vrt_account_input.width = 250
+        vrt_account_layout.addWidget(self.vrt_account_input)
+
+        # add a save button
+        save_button = QPushButton('Opslaan')
+        save_button.clicked.connect(lambda: self._save_button_action())
+        save_layout.addWidget(save_button)
 
         layout.addLayout(download_layout)
+        layout.addLayout(vrt_account_layout)
         layout.addLayout(save_layout)
 
         self.window.setLayout(layout)
 
-    def _save_settings(self):
+    def _download_button_action(self):
         download_path = QFileDialog.getExistingDirectory(self.window, 'Selecteer een download locatie')
         if download_path:
             self.download_path_input.setText(download_path)
             settings.set('Settings', 'download_path', download_path)
+
+    def _save_button_action(self):
+        settings.set('Settings', 'download_path', self.download_path_input.text())
+        settings.set('Vrt', 'email', self.vrt_account_email_input.text())
+        settings.set('Vrt', 'password', self.vrt_account_input.text())
+        self.window.close()
 
 class AboutApplication:
     def __init__(self, parent):

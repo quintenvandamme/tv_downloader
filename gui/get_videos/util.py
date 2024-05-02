@@ -8,7 +8,8 @@ from sys import exit
 from io import BytesIO
 from .constants import *
 from .download import download_video
-from PyQt6.QtWidgets import QProgressBar
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -20,9 +21,12 @@ def resource_path(relative_path):
 def saveFileToPath(fileName,dowloadPath=""):
     return os.path.join(dowloadPath,fileName)
 
-def print_error(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
-    exit(2)
+def print_error(message, guiParent=None):    
+    if guiParent != None:
+        QMessageBox.critical(guiParent, 'Error', message)
+    else:
+        print(message)
+    exit()
 
 def post_request(url, data, headers={}):
     try:

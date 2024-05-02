@@ -7,7 +7,7 @@ def get_vrtmax_token():
     token = json['vrtPlayerToken']
     return token
 
-def get_metadata(pageId):
+def get_metadata(pageId,guiParent):
     VRT_CLIENT_NAME  = 'WEB'
     VRT_CLIENT_VERSION = '1.5.1'
 
@@ -19,17 +19,20 @@ def get_metadata(pageId):
             "pageId": pageId
         }
     }
-    json = post_request('https://www.vrt.be/vrtnu-api/graphql/public/v1', data=data, headers=headers)
-    streamId = json['data']['page']['episode']['watchAction']['streamId']
-    title = json['data']['page']['title']
-    description = json['data']['page']['seo']['description']
-    thumbnailUrl = json['data']['page']['socialSharing']['image']['templateUrl']
-    date = json['data']['page']['episode']['primaryMeta'][2]['shortValue'].split(' ')[1].replace('/','-')
-    hour = json['data']['page']['episode']['primaryMeta'][2]['longValue'].split(' ')
-    hour = hour[len(hour)-1] + ':00'
-    year = json['data']['page']['objectId'].split('/')[4]
-    date = date + '-' + year + ' ' + hour
-    return streamId, title, description, thumbnailUrl, date    
+    try:
+        json = post_request('https://www.vrt.be/vrtnu-api/graphql/public/v1', data=data, headers=headers)
+        streamId = json['data']['page']['episode']['watchAction']['streamId']
+        title = json['data']['page']['title']
+        description = json['data']['page']['seo']['description']
+        thumbnailUrl = json['data']['page']['socialSharing']['image']['templateUrl']
+        date = json['data']['page']['episode']['primaryMeta'][2]['shortValue'].split(' ')[1].replace('/','-')
+        hour = json['data']['page']['episode']['primaryMeta'][2]['longValue'].split(' ')
+        hour = hour[len(hour)-1] + ':00'
+        year = json['data']['page']['objectId'].split('/')[4]
+        date = date + '-' + year + ' ' + hour
+        return streamId, title, description, thumbnailUrl, date
+    except:
+        print_error(STR_6,guiParent) 
 
 def get_pageId_and_fileName(url):
     url = url.split('/a-z/')[1]
@@ -40,37 +43,37 @@ def get_pageId_and_fileName(url):
     fileName = fileName[len(fileName)-1] + '.mp4'
     return pageId, fileName
     
-def get_streamUrl(streamId, vrtmaxToken):
+def get_streamUrl(streamId, vrtmaxToken,guiParent):
     url = 'https://media-services-public.vrt.be/media-aggregator/v2/media-items/' + streamId + '?vrtPlayerToken=' + vrtmaxToken + '&client=vrtnu-web%40PROD'
     a = get_request(url,{})
     if 'code' in a:
         if 'CONTENT_REQUIRES_AUTHENTICATION' == a['code']:
-            print_error(STR_7)
+            print_error(STR_7,guiParent)
     mpegUrl = a['targetUrls'][1]['url']
     streamUrl = mpegUrl.split('?')[0]
     if not 'nodrm' in streamUrl:
-        print_error(STR_6)
+        print_error(STR_6,guiParent)
     return streamUrl
     
-def get_video_from_vrtmax(url, settings):
-    email = settings.get('vrt', 'email')
-    password = settings.get('vrt', 'password')
+def get_video_from_vrtmax(url, settings, guiParent):
+    email = settings.get('Vrt', 'email')
+    password = settings.get('Vrt', 'password')
     if email == '' or password == '':
-        print_error(STR_7)
+        print_error(STR_7,guiParent)
 
     vrt = VRT(email=email, password=password)
     videos = []
     pageIdAndFileName = get_pageId_and_fileName(url)
     pageId = pageIdAndFileName[0]
     fileName = pageIdAndFileName[1]
-    metadata = get_metadata(pageId)
+    metadata = get_metadata(pageId,guiParent)
     streamId = metadata[0]
     title = metadata[1]
     description = metadata[2]
     thumbnailUrl = metadata[3]
     date = metadata[4]
     playerToken = vrt.get_player_token()
-    streamUrl = get_streamUrl(streamId,playerToken)
+    streamUrl = get_streamUrl(streamId,playerToken,guiParent)
     video = Video(streamUrl, url, title, description, thumbnailUrl, fileName, date)
     videos.append(video)
     return videos

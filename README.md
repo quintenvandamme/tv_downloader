@@ -22,9 +22,6 @@ Tv Downloader is een tool om video's van verschillende websites te downloaden.
 |[vrtnws.be](https://vrtnws.be)|✅|
 |[vrtmax.be](https://vrtmax.be)|✅|
 
-> [!NOTE]  
-> vrtnws en vrtmax werken momenteel niet omdat je een account nodig hebt om de video's te bekijken.
-
 ## Installatie
 
 | OS | ARCH | Download |

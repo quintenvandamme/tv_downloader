@@ -33,7 +33,11 @@ class Settings:
 
     def get(self, section, key):
         self._read()
-        return self.config[section][key]
+
+        if not self.config.has_section(section):
+            return None
+        else:
+            return self.config[section][key]
     
     def set(self, section, key, value):
         self.config[section][key] = value
