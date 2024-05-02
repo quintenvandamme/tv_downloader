@@ -18,7 +18,7 @@ def resource_path(relative_path):
 def create_icon_from_url(url):
     image_data = requests.get(url).content
 
-    pixmap = QPixmap()
+    pixmap = QPixmap()()
     pixmap.loadFromData(image_data)
 
     icon = QIcon(pixmap)

@@ -8,6 +8,7 @@ from .bruzz import get_video_from_bruzz
 from .rtv import get_video_from_rtv
 from .ringtv import get_video_from_ringtv
 from .standaard import get_video_from_standaard
+from .nwsnwsnws import get_video_from_nwsnwsnws
 from .constants import *
 from .util import print_error
 
@@ -30,6 +31,8 @@ def get_videos(url, settings, guiParent):
             videos = get_video_from_vrtnws_single(url,guiParent)
         elif url.startswith("https://www.vrt.be/vrtnws/") and not '/kijk/' in url:
             videos = get_video_from_vrtnws_multi(url,guiParent)
+        elif url.startswith("https://www.vrt.be/nwsnwsnws/"):
+            videos = get_video_from_nwsnwsnws(url,guiParent)
         elif url.startswith("https://www.hln.be/"):
             videos = get_video_from_hln(url)
         elif url.startswith("https://www.bruzz.be/"):

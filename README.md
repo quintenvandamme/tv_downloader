@@ -21,6 +21,7 @@ Tv Downloader is een tool om video's van verschillende websites te downloaden.
 |[tvl.be](https://tvl.be)|✅|
 |[vrtnws.be](https://vrtnws.be)|✅|
 |[vrtmax.be](https://vrtmax.be)|✅|
+|[nwsnwsnws.be](https://nwsnwsnws.be)|✅|
 
 ## Installatie
 
