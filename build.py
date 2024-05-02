@@ -32,6 +32,7 @@ def _get_ffmpeg():
         _run_command("tar -xf ffmpeg.tar.xz")
         _run_command(f"mv ./ffmpeg-git-*-{FFMPEG_ARCH}-static/ffmpeg ./out/ffmpeg")
         _run_command(f"rm -rf ffmpeg.tar.xz ffmpeg-git-*-{FFMPEG_ARCH}-static")
+        _run_command(f"chmod +x out/ffmpeg")
     elif OS == "win32":
         _get_7z()
         _run_command(f'Invoke-WebRequest -OutFile ffmpeg.7z -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z')

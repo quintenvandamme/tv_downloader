@@ -102,30 +102,26 @@ class MainApplication:
         self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
         self.window.show()
         self._create_widgets()
+        self._create_menubar()
+
+
+    def _create_menubar(self):
+        self.menubar = QMenuBar(self.window)
+        self.window.layout().setMenuBar(self.menubar)
+
+        # create settings button
+        settings_menu = self.menubar.addMenu('Menu')
+        settings_action = QAction('Instellingen', self.window)
+        settings_action.triggered.connect(lambda: SettingsApplication(self.window))
+        settings_menu.addAction(settings_action)
+        about_action = QAction('Over', self.window)
+        about_action.triggered.connect(lambda: AboutApplication(self.window))
+        settings_menu.addAction(about_action)
+
 
     def _create_widgets(self):
         main_layout = QVBoxLayout()
         search_layout = QHBoxLayout()
-        toolbar_layout = QHBoxLayout()
-
-        # Create a new layout for the toolbar
-        toolbar_layout.setContentsMargins(0, 0, 0, 0)
-        toolbar = QToolBar()
-        toolbar.setMovable(False)
-        
-        # Create a settings button
-
-        settings_action = QAction('Instellingen', self.window)
-        settings_action.triggered.connect(lambda: SettingsApplication(self.window))
-        toolbar.addAction(settings_action)
-
-        # Create an about button
-        about_action = QAction('Over', self.window)
-        about_action.triggered.connect(lambda: AboutApplication(self.window))
-        toolbar.addAction(about_action)
-
-        toolbar_layout.addWidget(toolbar)
-        main_layout.addLayout(toolbar_layout)
 
         # Create a search input field
         self.search_input = QLineEdit()
@@ -151,7 +147,7 @@ class MainApplication:
     def _handle_search(self):
         # This function will be called when the search button is clicked        
         search_query = self.search_input.text()
-        videos = get_videos(search_query)
+        videos = get_videos(search_query, settings)
         for video in videos:
             videoItem(video, self.search_results)
 
@@ -221,7 +217,7 @@ class AboutApplication:
         version_layout = QHBoxLayout()
 
         # Create a version label
-        version_text = QLabel('Versie 0.1.0 (alpha)')
+        version_text = QLabel('Versie 0.1.1 (beta)')
         version_layout.addWidget(version_text, stretch=1000)
 
         # Add a close button

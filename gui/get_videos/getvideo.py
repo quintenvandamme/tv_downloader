@@ -20,12 +20,12 @@ def validate_url(url):
             
     return goodUrl
 
-def get_videos(url):
+def get_videos(url, settings):
     videos = []
     checkedVideos = []
     if validate_url(url):
         if url.startswith("https://www.vrt.be/vrtmax/"):
-            videos = get_video_from_vrtmax(url)
+            videos = get_video_from_vrtmax(url, settings)
         elif url.startswith("https://www.vrt.be/vrtnws/") and '/kijk/' in url:
             videos = get_video_from_vrtnws_single(url)
         elif url.startswith("https://www.vrt.be/vrtnws/") and not '/kijk/' in url:

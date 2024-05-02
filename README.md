@@ -1,5 +1,7 @@
 # TV Downloader
 
+Tv Downloader is een tool om video's van verschillende websites te downloaden.
+
 [![Build Binary](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml)
 
 ## Ondersteunde websites
@@ -18,7 +20,7 @@
 |[tvoost.be](https://tvoost.be)|✅|
 |[tvl.be](https://tvl.be)|✅|
 |[vrtnws.be](https://vrtnws.be)|✅|
-|[vrtmax.be](https://vrtmax.be)|❌|
+|[vrtmax.be](https://vrtmax.be)|✅|
 
 > [!NOTE]  
 > vrtnws en vrtmax werken momenteel niet omdat je een account nodig hebt om de video's te bekijken.
