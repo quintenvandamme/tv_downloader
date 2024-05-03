@@ -12,13 +12,21 @@ on:
 jobs:
   Linux_arm64:
     runs-on: ubuntu-latest
-    container:
-      image: arm64v8/python:latest
-      platform: linux/arm64
 
     steps:
-      - name: Checkout code
+      - name: checkout
         uses: actions/checkout@v4
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+          check-latest: true
 
       - name: Install desktop-file-utils
         run: sudo apt-get install -y desktop-file-utils
@@ -31,4 +39,4 @@ jobs:
         with:
           artifacts: "./out/*"
           allowUpdates: true
-          tag: "continuous-build"
+          tag: "continious-build"
