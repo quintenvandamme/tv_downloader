@@ -22,12 +22,6 @@ jobs:
         with:
           platforms: arm64
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.11'
-          check-latest: true
-
       - name: Install desktop-file-utils
         run: sudo apt-get install -y desktop-file-utils
 
