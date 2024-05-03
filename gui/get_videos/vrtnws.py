@@ -1,4 +1,5 @@
 from .util import get_request, Video, unixTimeToDatetime, print_error
+from .constants import *
 from .vrtmax import get_vrtmax_token
 
 def get_streamUrlAndThumbnail(videoId, pubId, vrtmaxToken,guiParent):
