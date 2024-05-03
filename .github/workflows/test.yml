@@ -13,8 +13,9 @@ jobs:
   Linux_arm64:
     runs-on: ubuntu-latest
     container:
-      image: arm64v8/python:3.11
-      
+      image: arm64v8/python:latest
+      platform: linux/arm64
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
