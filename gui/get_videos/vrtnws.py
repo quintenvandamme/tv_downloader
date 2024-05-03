@@ -1,6 +1,5 @@
 from .util import get_request, Video, unixTimeToDatetime, print_error
 from .vrtmax import get_vrtmax_token
-from .constants import *
 
 def get_streamUrlAndThumbnail(videoId, pubId, vrtmaxToken,guiParent):
     url = 'https://media-services-public.vrt.be/media-aggregator/v2/media-items/' + pubId + '$' + videoId + '?vrtPlayerToken=' + vrtmaxToken + '&client=vrtnieuws'

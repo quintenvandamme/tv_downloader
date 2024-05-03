@@ -4,6 +4,9 @@ import sys
 OS = sys.platform
 ARCH = os.uname().machine
 
+def _print_stage(message):
+    print(f"\033[44m=> {message}\033[0m")
+
 def _run_command(command):
     os.system(command)
 
@@ -13,7 +16,7 @@ def _createDir(directory):
 
 def _get_7z():
     _run_command("winget install -e --id 7zip.7zip --accept-source-agreements --accept-package-agreements")
-    print("=> Installed 7z")
+    _print_stage("Installed 7z")
 
 def _get_ffmpeg():
     FFMPEG_ARCH = ""
@@ -24,7 +27,7 @@ def _get_ffmpeg():
         FFMPEG_ARCH = "arm64"
 
     if FFMPEG_ARCH == "":
-        print("=> Unsupported architecture")
+        _print_stage("Unsupported architecture")
         exit(1)
     
     if OS == "linux":
@@ -39,14 +42,14 @@ def _get_ffmpeg():
         _run_command(f'7z.exe x ffmpeg.7z -oout/ffmpeg.exe bin/ffmpeg.exe -r')
         _run_command(f'del ffmpeg.7z')
 
-    print("=> Downloaded ffmpeg")
+    _print_stage("Downloaded ffmpeg")
     
 def install_dependencies():
     print("=> Installing dependencies...")
     _run_command("pip install -r requirements.txt --break-system-packages")
 
 def clean():
-    print("=> Cleaning up...")
+    _print_stage("Cleaning up...")
 
     if OS == "linux":
         _run_command("rm -rf dist/ build/ out/ tvdownloader.spec")
@@ -55,7 +58,7 @@ def clean():
         _run_command("del tvdownloader.spec")
 
 def build_appimage():
-    print("=> Building AppImage for {OS}-{ARCH}...")
+    _print_stage(f"Building AppImage for {OS}-{ARCH}...")
     _run_command(f'curl -L https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-{ARCH}.AppImage -o appimagetool.AppImage')
     _run_command('chmod +x appimagetool.AppImage')
     _createDir('out/appimage.AppDir/usr/bin')
@@ -66,12 +69,12 @@ def build_appimage():
     _run_command('chmod +x out/appimage.AppDir/tvdownloader.desktop')
     _run_command(f'ARCH={ARCH} ./appimagetool.AppImage out/appimage.AppDir out/tvdownloader-{OS}-{ARCH}.AppImage')
     _run_command('rm -rf out/appimage.AppDir appimagetool.AppImage')
-    print(f"=> Built out/tvdownloader-{OS}-{ARCH}.AppImage")
+    _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}.AppImage")
 
 def build():
     clean()
     install_dependencies()
-    print(f"=> Building TV Downloader for {OS}-{ARCH}...")
+    _print_stage(f"Building TV Downloader for {OS}-{ARCH}...")
     _createDir("out")
     _get_ffmpeg()
 
@@ -80,7 +83,7 @@ def build():
         _run_command(f'mv dist/tvdownloader out/tvdownloader-{OS}-{ARCH}')
         _run_command('rm -rf dist/ build/ tvdownloader.spec ./out/ffmpeg')
         _run_command(f'chmod +x out/tvdownloader-{OS}-{ARCH}')
-        print(f"=> Built out/tvdownloader-{OS}-{ARCH}")
+        _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}")
         build_appimage()
     elif OS == "win32":
         pass    
@@ -88,7 +91,7 @@ def build():
 def main():
     args = sys.argv[1:]
     if len(args) == 0:
-        print("=> Usage: python build.py [build|clean]")
+        _print_stage("Usage: python build.py [build|clean]")
         exit(1)
     elif args[0] == "build":
         build()
