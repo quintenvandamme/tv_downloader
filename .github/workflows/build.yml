@@ -31,3 +31,24 @@ jobs:
         artifacts: "./out/*"
         allowUpdates: true
         tag: "continious-build"
+  
+  Windows_x86_64:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.11'
+        check-latest: true
+        
+    - name: Build TV Downloader
+      run: python build.py build
+
+    - name: Upload Binary
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./out/*"
+        allowUpdates: true
+        tag: "continious-build"
