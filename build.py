@@ -2,7 +2,17 @@ import os
 import sys
 
 OS = sys.platform
-ARCH = os.uname().machine
+ARCH = "unknown"
+
+if OS == "linux":
+    ARCH = os.uname().machine
+elif OS == "win32":
+    ARCH = os.environ['PROCESSOR_ARCHITECTURE']
+
+    if ARCH == "AMD64":
+        ARCH = "x86_64"
+    elif ARCH == "ARM64":
+        ARCH = "aarch64"
 
 def _print_stage(message):
     print(f"\033[44m=> {message}\033[0m")
@@ -37,9 +47,12 @@ def _get_ffmpeg():
         _run_command(f"rm -rf ffmpeg.tar.xz ffmpeg-git-*-{FFMPEG_ARCH}-static")
         _run_command(f"chmod +x out/ffmpeg")
     elif OS == "win32":
+        PROGFILES = os.environ['ProgramFiles']
+        ZIP_PATH = f"{PROGFILES}\\7-Zip\\7z.exe"
+
         _get_7z()
-        _run_command(f'Invoke-WebRequest -OutFile ffmpeg.7z -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z')
-        _run_command(f'7z.exe x ffmpeg.7z -oout/ffmpeg.exe bin/ffmpeg.exe -r')
+        _run_command(f'curl -L https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z -o ffmpeg.7z')
+        _run_command(f'"{ZIP_PATH}" e ffmpeg.7z -oout ffmpeg.exe -r')
         _run_command(f'del ffmpeg.7z')
 
     _print_stage("Downloaded ffmpeg")
@@ -48,13 +61,27 @@ def install_dependencies():
     print("=> Installing dependencies...")
     _run_command("pip install -r requirements.txt --break-system-packages")
 
+def activate_venv():
+    _run_command("python -m venv tvdownloader-venv")
+
+    if OS == "linux":
+        _run_command("source tvdownloader-venv/bin/activate")
+    elif OS == "win32":
+        _run_command("tvdownloader-venv\\Scripts\\activate")
+
+    _print_stage("Activated virtual environment")
+
+def deactivate_venv():
+    _run_command("source deactivate")
+    _print_stage("Deactivated virtual environment")
+
 def clean():
     _print_stage("Cleaning up...")
 
     if OS == "linux":
         _run_command("rm -rf dist/ build/ out/ tvdownloader.spec")
     elif OS == "win32":
-        _run_command("rmdir /s /q dist build out")
+        _run_command("rmdir /s /q dist build out tvdownloader-venv")
         _run_command("del tvdownloader.spec")
 
 def build_appimage():
@@ -71,22 +98,29 @@ def build_appimage():
     _run_command('rm -rf out/appimage.AppDir appimagetool.AppImage')
     _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}.AppImage")
 
+
 def build():
     clean()
+    activate_venv()
     install_dependencies()
     _print_stage(f"Building TV Downloader for {OS}-{ARCH}...")
     _createDir("out")
     _get_ffmpeg()
 
     if OS == "linux":
-        _run_command('pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo.ico  gui/main.py')
+        _run_command('pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo-256x256.ico  gui/main.py')
         _run_command(f'mv dist/tvdownloader out/tvdownloader-{OS}-{ARCH}')
         _run_command('rm -rf dist/ build/ tvdownloader.spec ./out/ffmpeg')
         _run_command(f'chmod +x out/tvdownloader-{OS}-{ARCH}')
         _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}")
         build_appimage()
     elif OS == "win32":
-        pass    
+        _run_command('pyinstaller.exe -F --add-data "./out/ffmpeg.exe:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo-256x256.ico  gui/main.py')
+        _run_command(f'move dist/tvdownloader out/tvdownloader-{OS}-{ARCH}')
+        _run_command('del dist/ build/ tvdownloader.spec ./out/ffmpeg')   
+        _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}")
+
+    deactivate_venv()
 
 def main():
     args = sys.argv[1:]

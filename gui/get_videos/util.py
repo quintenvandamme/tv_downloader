@@ -11,6 +11,14 @@ from .download import download_video
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 
+def getOS():
+    if sys.platform == "win32":
+        return "win32"
+    elif sys.platform == "linux":
+        return "linux"
+    else:
+        return "Unsupported OS"
+
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
@@ -92,8 +100,15 @@ class Video:
         return os.path.isfile(saveFileToPath(self.fileName))
 
     def download(self, guiParent, downloadPath):
+        ffmpegPath = ""
+
+        if getOS() == "win32":
+            ffmpegPath = resource_path('./ffmpeg/ffmpeg.exe')
+        else:
+            ffmpegPath = resource_path('./ffmpeg/ffmpeg')
+
         progressBar = ProgressBar(guiParent)
-        thread = threading.Thread(target=download_video, args=(self.streamUrl,saveFileToPath(self.fileName, dowloadPath=downloadPath), resource_path('./ffmpeg/ffmpeg'),progressBar,))
+        thread = threading.Thread(target=download_video, args=(self.streamUrl,saveFileToPath(self.fileName, dowloadPath=downloadPath), resource_path(ffmpegPath),progressBar,))
         thread.start()
 
         if not thread.is_alive():

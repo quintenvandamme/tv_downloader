@@ -4,3 +4,4 @@ build/
 out/
 *.spec
 data/settings/settings.ini
+tvdownloader-venv/
