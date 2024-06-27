@@ -116,8 +116,8 @@ def build():
         build_appimage()
     elif OS == "win32":
         _run_command('pyinstaller.exe -F --add-data "./out/ffmpeg.exe:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo-256x256.ico  gui/main.py')
-        _run_command(f'move dist/tvdownloader out/tvdownloader-{OS}-{ARCH}')
-        _run_command('del dist/ build/ tvdownloader.spec ./out/ffmpeg')   
+        _run_command(f'move dist/tvdownloader.exe out/tvdownloader-{OS}-{ARCH}.exe')
+        _run_command('del dist/ build/ tvdownloader.spec ./out/ffmpeg.exe')   
         _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}")
 
     deactivate_venv()
