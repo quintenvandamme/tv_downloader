@@ -7,8 +7,10 @@ import threading
 
 from get_videos import get_videos
 from settings import Settings
+from lang import Lang
 
 settings = Settings()
+lang = Lang()
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -110,11 +112,11 @@ class MainApplication:
         self.window.layout().setMenuBar(self.menubar)
 
         # create settings button
-        settings_menu = self.menubar.addMenu('Menu')
-        settings_action = QAction('Instellingen', self.window)
+        settings_menu = self.menubar.addMenu(lang.get('menu'))
+        settings_action = QAction(lang.get('settings'), self.window)
         settings_action.triggered.connect(lambda: SettingsApplication(self.window))
         settings_menu.addAction(settings_action)
-        about_action = QAction('Over', self.window)
+        about_action = QAction(lang.get('about'), self.window)
         about_action.triggered.connect(lambda: AboutApplication(self.window))
         settings_menu.addAction(about_action)
 
@@ -129,7 +131,7 @@ class MainApplication:
         search_layout.addWidget(self.search_input, stretch=1000)
 
         # Create a search button
-        self.search_button = QPushButton('Zoeken')
+        self.search_button = QPushButton(lang.get('search'))
         self.search_button.clicked.connect(self._handle_search)
         search_layout.addWidget(self.search_button)
         search_layout.addStretch(1)
@@ -158,7 +160,7 @@ class SettingsApplication:
     def __init__(self, window):
         # Create a new dialog window
         self.window = QDialog(window)
-        self.window.setWindowTitle('Instellingen')
+        self.window.setWindowTitle(lang.get('settings'))
         self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
         self.window.setMinimumSize(600, 300)
         self.window.show()
@@ -170,7 +172,7 @@ class SettingsApplication:
         save_layout = QHBoxLayout()
 
         # Create a label for the download path
-        download_path_label = QLabel('Download locatie:')
+        download_path_label = QLabel(lang.get('download_location'))
         download_layout.addWidget(download_path_label, stretch=1000)
 
         # Create a line edit for the download path
@@ -179,7 +181,7 @@ class SettingsApplication:
         download_layout.addWidget(self.download_path_input)
 
         # create a button and use a slot to connect it to the function
-        download_button = QPushButton('Open')
+        download_button = QPushButton(lang.get('open'))
         # add the standard folder icon to the button
         download_button.setIcon(QIcon.fromTheme('folder'))
 
@@ -188,14 +190,14 @@ class SettingsApplication:
 
         # create vrt account settings
         vrt_account_layout = QHBoxLayout()
-        vrt_account_label = QLabel('VRT account:')
+        vrt_account_label = QLabel(lang.get('vrt_account'))
         vrt_account_layout.addWidget(vrt_account_label)
         self.vrt_account_email_input = QLineEdit(settings.get('Vrt', 'email'))
-        self.vrt_account_email_input.setPlaceholderText('E-mail')
+        self.vrt_account_email_input.setPlaceholderText(lang.get('e-mail'))
         self.vrt_account_email_input.width = 400
         vrt_account_layout.addWidget(self.vrt_account_email_input)
         self.vrt_account_input = QLineEdit(settings.get('Vrt', 'password'))
-        self.vrt_account_input.setPlaceholderText('Wachtwoord')
+        self.vrt_account_input.setPlaceholderText(lang.get('password'))
         self.vrt_account_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.vrt_account_input.width = 250
         vrt_account_layout.addWidget(self.vrt_account_input)
@@ -212,7 +214,7 @@ class SettingsApplication:
         self.window.setLayout(layout)
 
     def _download_button_action(self):
-        download_path = QFileDialog.getExistingDirectory(self.window, 'Selecteer een download locatie')
+        download_path = QFileDialog.getExistingDirectory(self.window, lang.get('select-download-location'))
         if download_path:
             self.download_path_input.setText(download_path)
             settings.set('Settings', 'download_path', download_path)
@@ -235,7 +237,7 @@ class AboutApplication:
         layout = QVBoxLayout()
         
         # Create a label with the about text
-        about_text = QLabel('TV Downloader is een applicatie die het mogelijk maakt om video\'s van verschillende nieuwswebsites te downloaden.')
+        about_text = QLabel(lang.get('about-text'))
         about_text.setWordWrap(True)
         layout.addWidget(about_text)
 
@@ -243,11 +245,11 @@ class AboutApplication:
         version_layout = QHBoxLayout()
 
         # Create a version label
-        version_text = QLabel('Versie 0.1.1 (beta)')
+        version_text = QLabel(f'{lang.get("version")} 0.1.1 (beta)')
         version_layout.addWidget(version_text, stretch=1000)
 
         # Add a close button
-        close_button = QPushButton('Ok')
+        close_button = QPushButton(lang.get('Ok'))
         close_button.clicked.connect(self.window.close)
         version_layout.addWidget(close_button)
 

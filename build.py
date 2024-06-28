@@ -108,19 +108,19 @@ def build():
     _get_ffmpeg()
 
     if OS == "linux":
-        _run_command('pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo-256x256.ico  gui/main.py')
+        _run_command('pyinstaller -F --add-data "./out/ffmpeg:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --noconsole --clean --name tvdownloader --icon="./data/logo/logo-256x256.ico"  gui/main.py')
         _run_command(f'mv dist/tvdownloader out/tvdownloader-{OS}-{ARCH}')
         _run_command('rm -rf dist/ build/ tvdownloader.spec ./out/ffmpeg')
         _run_command(f'chmod +x out/tvdownloader-{OS}-{ARCH}')
         _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}")
         build_appimage()
     elif OS == "win32":
-        _run_command('pyinstaller.exe -F --add-data "./out/ffmpeg.exe:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo-256x256.ico  gui/main.py')
-        _run_command(f'powershell -command "Move-Item -Path dist/tvdownloader.exe -Destination out/tvdownloader-{OS}-{ARCH}.exe"')
+        _run_command('pyinstaller.exe -F --add-data "./out/ffmpeg.exe:./ffmpeg/" --add-data "./data/logo/*:./data/logo/" --windowed --onefile --noconsole --clean --name tvdownloader --icon="./data/logo/logo-256x256.ico"  gui/main.py')
+        _run_command(f'powershell -command "Move-Item -Path dist/tvdownloader.exe -Destination out/tvdownloader-windows-{ARCH}.exe"')
         _run_command('rmdir /s /q dist build tvdownloader-venv')  
         _run_command('powershell -command "Remove-Item -Path out/ffmpeg.exe"')
         _run_command('powershell -command "Remove-Item -Path tvdownloader.spec"')
-        _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}.exe")
+        _print_stage(f"Built out/tvdownloader-windows-{ARCH}.exe")
 
     deactivate_venv()
 
