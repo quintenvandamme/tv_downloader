@@ -116,10 +116,11 @@ def build():
         build_appimage()
     elif OS == "win32":
         _run_command('pyinstaller.exe -F --add-data "./out/ffmpeg.exe:./ffmpeg/" --add-data "./data/logo/logo-64x64.png:./data/logo/" --windowed --onefile --clean --name tvdownloader --icon=data/logo/logo-256x256.ico  gui/main.py')
-        _run_command(f'Move-Item -Path dist/tvdownloader.exe -Destination out/tvdownloader-{OS}-{ARCH}.exe')
+        _run_command(f'powershell -command "Move-Item -Path dist/tvdownloader.exe -Destination out/tvdownloader-{OS}-{ARCH}.exe"')
         _run_command('rmdir /s /q dist build tvdownloader-venv')  
-        _run_command('del tvdownloader.spec ./out/ffmpeg.exe') 
-        _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}")
+        _run_command('powershell -command "Remove-Item -Path out/ffmpeg.exe"')
+        _run_command('powershell -command "Remove-Item -Path tvdownloader.spec"')
+        _print_stage(f"Built out/tvdownloader-{OS}-{ARCH}.exe")
 
     deactivate_venv()
 
