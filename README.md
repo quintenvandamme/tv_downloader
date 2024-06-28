@@ -29,7 +29,7 @@ Tv Downloader is een tool om video's van verschillende websites te downloaden.
 | -- | ---- | -------- | ------------ |
 | Linux | x86_64 | [tvdownloader-linux-x86_64](https://github.com/quintenvandamme/tv_downloader/releases/download/continious-build/tvdownloader-Linux-x86_64) | [![Build Binary](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml) |s
 | Linux | x86_64 | [tvdownloader-linux-x86_64.AppImage](https://github.com/quintenvandamme/tv_downloader/releases/download/continious-build/tvdownloader-Linux-x86_64.AppImage) | [![Build Binary](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml) |
-| Windows | x86_64 | [tvdownloader-win32-x86_64.exe](https://github.com/quintenvandamme/tv_downloader/releases/download/continious-build/tvdownloader-win32-x86_64.exe) |[![Build](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml/badge.svg)](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml)|
+| Windows | x86_64 | [tvdownloader-windows-x86_64.exe](https://github.com/quintenvandamme/tv_downloader/releases/download/continious-build/tvdownloader-windows-x86_64.exe) |[![Build](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml/badge.svg)](https://github.com/quintenvandamme/tv_downloader/actions/workflows/build.yml)|
 
 ## Bouwen
 

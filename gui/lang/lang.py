@@ -34,6 +34,7 @@ en = {
     "about-text": "TV Downloader is an application that allows you to download videos from various news websites.",
     "version": "Version",
     "Ok": "Ok",
+    "no-description": "No description available",
 }
 
 nl = {
@@ -50,4 +51,5 @@ nl = {
     "about-text": "TV Downloader is een applicatie die het mogelijk maakt om video\'s van verschillende nieuwswebsites te downloaden.",
     "version": "Versie",
     "Ok": "Ok",
+    "no-description": "Geen beschrijving beschikbaar",
 }

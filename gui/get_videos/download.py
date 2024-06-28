@@ -27,7 +27,7 @@ def download_video(url,outputFile,ffmpeg_path,progressBar):
         ]
         
         process = subprocess.Popen(
-            command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False
         )
             
         for line in process.stdout:

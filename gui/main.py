@@ -57,6 +57,9 @@ class videoItem:
         if len(description_text) > 200:
             description_text = description_text[:200] + '...'
 
+        if description_text == '':
+            description_text = lang.get('no-description')
+
         description_label = QLabel(description_text)
         description_label.setWordWrap(True)
         # set maximum length of description
@@ -245,7 +248,7 @@ class AboutApplication:
         version_layout = QHBoxLayout()
 
         # Create a version label
-        version_text = QLabel(f'{lang.get("version")} 0.1.1 (beta)')
+        version_text = QLabel(f'{lang.get("version")} 0.1.2 (beta)')
         version_layout.addWidget(version_text, stretch=1000)
 
         # Add a close button
@@ -261,22 +264,3 @@ class AboutApplication:
 if __name__ == '__main__':
     app = MainApplication()
     app.run()
-
-# test
-# https://www.hln.be/buitenland/live-gijzeling-in-nederlands-cafe-voorbij-vier-slachtoffers-vrijgelaten-gijzelnemer-geboeid-door-de-politie~a0dfda52/
-# https://www.vrt.be/vrtmax/a-z/vrt-nws-journaal/2024/vrt-nws-journaal-vrt-nws-journaal-laat-20240421/
-# https://focus-wtv.be/nieuws/miss-belgie-west-vlaamse-finalisten-vallen-niet-in-de-prijzen
-# https://www.bruzz.be/actua/politiek/vlaams-minister-van-brussel-regering-blinkt-uit-passiviteit-en-inertie-2024-02-21
-# https://www.tvoost.be/nieuws/jan-tratnik-wint-omloop-oliver-naesen-heel-knap-vierde-als-je-vooraf-de-benen-niet-kan-inschatten-is-dit-een-mooi-resultaat-165206
-# https://www.tvl.be/nieuws/jongeren-die-voor-het-eerst-stemmen-weten-weinig-of-niets-over-de-verkiezingen-165198
-# https://www.robtv.be/nieuws/weekwas-zaterdag-24-februari-165193
-# https://www.hln.be/video/productie/we-hebben-de-ram-bij-de-horens-gevat-letterlijk-428950
-# https://www.nieuwsblad.be/cnt/dmf20240225_94177728
-# https://www.vrt.be/vrtmax/a-z/vrt-nws-journaal/2024/vrt-nws-journaal-vrt-nws-journaal-13u-20240225
-# https://www.rtv.be/regionale-sport/wout-van-aert-wil-meteen-scoren-tijdens-openingsweekend
-# https://www.vrt.be/vrtnws/nl/kijk/2024/02/25/d7d-oekraine-oorlog-iryna-mudra-gevlucht-met-zoon-nooit-opgeven-/
-# https://www.vrt.be/vrtnws/nl/2024/02/26/liveblog-boerenprotest/
-# https://www.gva.be/cnt/dmf20240229_96365490
-# https://www.ringtv.be/felicitaties-voor-drie-jarigen-die-op-schrikkeldag-jarig-zijn
-# https://www.standaard.be/cnt/dmf20231113_92216398
-# https://www.vrt.be/vrtnws/nl/2024/02/29/poetin-toespraak-parlement/

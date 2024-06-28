@@ -14,13 +14,35 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         check-latest: true
 
     - name: Install desktop-file-utils
       run: sudo apt-get install -y desktop-file-utils
+
+    - name: Build TV Downloader
+      run: python build.py build
+
+    - name: Upload Binary
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./out/*"
+        allowUpdates: true
+        tag: "continious-build"
+
+  Linux_aarch64:
+    runs-on: ubuntu-latest
+    package-suffix: linux-aarch64
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        check-latest: true
 
     - name: Build TV Downloader
       run: python build.py build
@@ -38,7 +60,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         check-latest: true

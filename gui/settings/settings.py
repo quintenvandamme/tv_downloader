@@ -7,6 +7,7 @@ settings_file_path = os.path.join(settings_file_dir, 'settings.ini')
 
 class Settings:
     def __init__(self):
+        print(settings_file_path)
         self.config = configparser.ConfigParser()
         self._create()
         self._read()
