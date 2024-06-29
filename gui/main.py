@@ -10,7 +10,7 @@ from settings import Settings
 from lang import Lang
 
 settings = Settings()
-lang = Lang()
+lang = Lang(settings.get('Settings', 'language'))
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -152,6 +152,10 @@ class MainApplication:
     def _handle_search(self):
         # This function will be called when the search button is clicked        
         search_query = self.search_input.text()
+
+        # Clear the search results
+        self.search_results.clear()
+
         videos = get_videos(search_query, settings,self.window)
         for video in videos:
             videoItem(video, self.search_results)
@@ -165,7 +169,7 @@ class SettingsApplication:
         self.window = QDialog(window)
         self.window.setWindowTitle(lang.get('settings'))
         self.window.setWindowIcon(QIcon(resource_path('data/logo/logo-256x256.png')))
-        self.window.setMinimumSize(600, 300)
+        self.window.setMinimumSize(400, 300)
         self.window.show()
         self._create_widgets()
 
@@ -191,6 +195,24 @@ class SettingsApplication:
         download_button.clicked.connect(lambda: self._download_button_action())
         download_layout.addWidget(download_button)
 
+        # create a language setting
+        language_layout = QHBoxLayout()
+
+        selectedLang = settings.get('Settings', 'language')
+        if selectedLang == '':
+            selectedLang = lang.getLanguage()
+
+        language_label = QLabel(lang.get('language'))
+        language_layout.addWidget(language_label)
+        self.language_combobox = QComboBox()
+        languages = lang.getLanguages()
+        languages.remove(selectedLang)
+        languages.insert(0, selectedLang)
+        for language in languages:
+            self.language_combobox.addItem(language)
+
+        language_layout.addWidget(self.language_combobox)
+
         # create vrt account settings
         vrt_account_layout = QHBoxLayout()
         vrt_account_label = QLabel(lang.get('vrt_account'))
@@ -204,13 +226,14 @@ class SettingsApplication:
         self.vrt_account_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.vrt_account_input.width = 250
         vrt_account_layout.addWidget(self.vrt_account_input)
-
+    
         # add a save button
-        save_button = QPushButton('Opslaan')
+        save_button = QPushButton(lang.get('save'))
         save_button.clicked.connect(lambda: self._save_button_action())
         save_layout.addWidget(save_button)
 
         layout.addLayout(download_layout)
+        layout.addLayout(language_layout)
         layout.addLayout(vrt_account_layout)
         layout.addLayout(save_layout)
 
@@ -226,6 +249,8 @@ class SettingsApplication:
         settings.set('Settings', 'download_path', self.download_path_input.text())
         settings.set('Vrt', 'email', self.vrt_account_email_input.text())
         settings.set('Vrt', 'password', self.vrt_account_input.text())
+        settings.set('Settings', 'language', self.language_combobox.currentText())
+        lang.setLanguage(self.language_combobox.currentText())
         self.window.close()
 
 class AboutApplication:
